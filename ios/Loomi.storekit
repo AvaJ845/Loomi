@@ -1,0 +1,80 @@
+{
+  "identifier" : "AB12CD34",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "79.99",
+      "familyShareable" : false,
+      "internalID" : "loomi_plus_lifetime",
+      "localizations" : [
+        {
+          "description" : "Unlock Loomi+ once, keep it forever.",
+          "displayName" : "Loomi+ Lifetime",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "loomi.plus.lifetime",
+      "referenceName" : "Loomi+ Lifetime",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_locale" : "en_US",
+    "_storefront" : "USA"
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "loomi_plus_group",
+      "localizations" : [],
+      "name" : "Loomi+",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "loomi_plus_monthly",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "On-device insights + full check-in history, billed monthly.",
+              "displayName" : "Loomi+ Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "loomi.plus.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Loomi+ Monthly",
+          "subscriptionGroupID" : "loomi_plus_group",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "29.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "loomi_plus_annual",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "On-device insights + full check-in history, billed yearly.",
+              "displayName" : "Loomi+ Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "loomi.plus.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Loomi+ Yearly",
+          "subscriptionGroupID" : "loomi_plus_group",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

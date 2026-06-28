@@ -1,5 +1,38 @@
 # Loomi — product roadmap
 
+## Build freeze (2026-06-28 — repo-state council review)
+
+The repo had accumulated several rounds of strategy churn (pricing model
+changed, a paywall promo banner added then removed, a full game built then
+deleted) with zero TestFlight builds and no committed, buildable Xcode
+project — i.e. decisions were being revisited based on AI-roleplay critique
+of a product no real person had touched yet. **Freeze:** no further
+pricing/paywall/feature-direction changes until a TestFlight build exists and
+at least one person outside the dev has used it. Bug fixes and the scaffolding
+below are exempt from the freeze.
+
+**What's actually needed to produce that first TestFlight build** (all of
+this requires a Mac + Xcode + an Apple Developer Program account — none of
+which exist in this environment, so it's a checklist for whoever has access,
+not something an agent can complete remotely):
+
+1. `cd ios && xcodegen generate` (see `ios/README.md`) → open `Loomi.xcodeproj`,
+   confirm it builds and runs in the simulator.
+2. Add a real 1024×1024 app icon to `Assets.xcassets/AppIcon.appiconset`
+   (placeholder structure exists, no image yet).
+3. Set a signing team (Apple Developer Program membership required) and a
+   real bundle ID if `com.loomi.app` isn't yours to use.
+4. Create the three IAP products in App Store Connect with the exact IDs
+   `loomi.plus.monthly` / `loomi.plus.annual` / `loomi.plus.lifetime`
+   (`ios/Loomi.storekit` already lets you test the flow locally without this
+   step, but real purchases need it).
+5. Product ▸ Archive ▸ Distribute App ▸ TestFlight, invite a small group of
+   real testers (the shift-worker niche in `Distribution-Draft.md` is the
+   suggested first audience).
+6. Only after step 5 produces actual feedback: resume iterating on
+   pricing/paywall/feature direction, now grounded in real usage instead of
+   another roleplay round.
+
 A stress-first, privacy-respecting, mascot-led companion — a focused calm-tools
 app, no game bundled inside it. Rootd (4.8★, ~10K ratings, Apple Editors' Choice)
 is useful market context, not the strategy: a new, zero-review solo app can't

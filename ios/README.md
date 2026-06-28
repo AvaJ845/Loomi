@@ -5,6 +5,44 @@ companion: one big button you press when stress hits, and he walks you through
 breathing, grounding, and unpacking what's on your mind — plus learning sections
 and support resources.
 
+## Quick start (XcodeGen — generates a real, buildable .xcodeproj)
+
+`project.yml` in this folder is an [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+spec that defines the app target, the `LoomiWidget` extension target, the
+`loomi://` URL scheme, the HealthKit entitlement, and a scheme pre-wired to
+`Loomi.storekit` for local in-app-purchase testing. This is the project file
+itself, generated from source — nothing here has been run through `xcodegen`
+yet (this repo was authored without access to a Mac), so the first person to
+try it on a real Mac should expect to fix small things and is encouraged to
+commit the result.
+
+```sh
+brew install xcodegen        # one-time
+cd ios
+xcodegen generate            # produces Loomi.xcodeproj
+open Loomi.xcodeproj
+```
+
+Then ⌘R. The `Loomi` scheme already points its Run action at `Loomi.storekit`,
+so the three Loomi+ products (monthly/annual/lifetime) are purchasable in the
+simulator immediately — no App Store Connect setup needed for local testing.
+(If your Xcode/XcodeGen version doesn't pick up `storeKitConfiguration`
+automatically, set it manually: Product ▸ Scheme ▸ Edit Scheme ▸ Run ▸ Options
+▸ StoreKit Configuration ▸ `Loomi.storekit`.)
+
+Re-run `xcodegen generate` any time you add/remove a `.swift` file — it
+re-scans `LoomiApp/` and `LoomiWidget/` automatically, so there's no manual
+target-membership step.
+
+**App icon:** `LoomiApp/Assets.xcassets/AppIcon.appiconset` exists but has no
+image yet — add a 1024×1024 PNG before archiving for TestFlight/App Store
+(simulator/debug builds run fine without it).
+
+## Manual setup (fallback, if you'd rather not use XcodeGen)
+
+The steps below predate `project.yml` and still work if you want to build the
+project by hand instead.
+
 ## Files
 
 | File | What's in it |
