@@ -30,9 +30,22 @@ let MOODS: [Mood] = [
 func moodColor(_ key: String) -> Color { MOODS.first { $0.key == key }?.color ?? .muted }
 func moodEmoji(_ key: String) -> String { MOODS.first { $0.key == key }?.emoji ?? "•" }
 
+/// Self-reported outcome of a relief session — "did that help?" — logged locally
+/// only, so the app can tell whether the core loop actually works without any
+/// analytics backend or tracking.
+enum ReliefOutcome: String, Codable { case calmer, better, stillRough }
+
+struct ReliefSession: Identifiable, Codable {
+    let id: UUID
+    var date: Date
+    var outcome: ReliefOutcome
+}
+
 final class JournalStore: ObservableObject {
     @Published private(set) var entries: [JournalEntry] = []
+    @Published private(set) var reliefSessions: [ReliefSession] = []
     private let key = "loomi.journal.entries.v1"
+    private let sessionsKey = "loomi.relief.sessions.v1"
 
     init() { load() }
 
@@ -44,15 +57,28 @@ final class JournalStore: ObservableObject {
         entries.removeAll { $0.id == e.id }
         save()
     }
+    func logReliefOutcome(_ outcome: ReliefOutcome) {
+        reliefSessions.insert(ReliefSession(id: UUID(), date: Date(), outcome: outcome), at: 0)
+        saveSessions()
+    }
     private func load() {
         if let d = UserDefaults.standard.data(forKey: key),
            let arr = try? JSONDecoder().decode([JournalEntry].self, from: d) {
             entries = arr
         }
+        if let d = UserDefaults.standard.data(forKey: sessionsKey),
+           let arr = try? JSONDecoder().decode([ReliefSession].self, from: d) {
+            reliefSessions = arr
+        }
     }
     private func save() {
         if let d = try? JSONEncoder().encode(entries) {
             UserDefaults.standard.set(d, forKey: key)
+        }
+    }
+    private func saveSessions() {
+        if let d = try? JSONEncoder().encode(reliefSessions) {
+            UserDefaults.standard.set(d, forKey: sessionsKey)
         }
     }
 }

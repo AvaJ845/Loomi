@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var router: Router
-    @State private var showPaywall = false
 
     var body: some View {
         ZStack {
@@ -25,23 +24,21 @@ struct ContentView: View {
                 }
             }
         }
-        .sheet(isPresented: $showPaywall) {
-            PaywallView(onClose: { showPaywall = false })
-        }
     }
 
     @ViewBuilder private var content: some View {
         switch router.screen {
-        case .home:        HomeView(go: { router.screen = $0 }, upgrade: { showPaywall = true })
+        case .home:        HomeView(go: { router.screen = $0 })
         case .relief:      ReliefView(goHome: { router.screen = .home })
         case .breathe:     BreatheScreen(goHome: { router.screen = .home })
         case .journal:     JournalView(goHome: { router.screen = .home }, goStats: { router.screen = .stats })
-        case .stats:       StatsView(goHome: { router.screen = .journal })
+        case .stats:       StatsView(goHome: { router.screen = .journal }, goInsights: { router.screen = .insights })
+        case .insights:    InsightsView(goHome: { router.screen = .stats })
         case .understand:  LessonsView(title: "Understand stress", eyebrow: "The basics", items: understandItems, goHome: { router.screen = .home })
         case .techniques:  LessonsView(title: "In-the-moment", eyebrow: "Fast relief", items: techniqueItems, goHome: { router.screen = .home })
         case .resilience:  LessonsView(title: "Build resilience", eyebrow: "Over time", items: resilienceItems, goHome: { router.screen = .home })
         case .support:     SupportView(goHome: { router.screen = .home })
-        case .settings:    SettingsView(goHome: { router.screen = .home }, upgrade: { showPaywall = true })
+        case .settings:    SettingsView(goHome: { router.screen = .home })
         }
     }
 
@@ -82,7 +79,6 @@ struct ContentView: View {
 
 struct HomeView: View {
     var go: (Screen) -> Void
-    var upgrade: () -> Void
 
     var body: some View {
         VStack(spacing: 14) {
@@ -119,38 +115,8 @@ struct HomeView: View {
             .padding(.top, 4)
 
             navGrid
-            plusUpsell
         }
         .padding(.top, 6)
-    }
-
-    /// Leads with "full lessons/visualizations/sleep sounds" rather than
-    /// "remove ads" or similar — there's no ad-supported tier to remove from,
-    /// and this is what Loomi+ actually unlocks once that content exists.
-    private var plusUpsell: some View {
-        Button(action: upgrade) {
-            HStack(spacing: 14) {
-                ZStack {
-                    Circle().fill(Color.cream.opacity(0.18)).frame(width: 54, height: 54)
-                    Text("✨").font(.system(size: 24))
-                }
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Try Loomi+").font(.baloo(18, .bold)).foregroundColor(.cream)
-                    Text("Full lessons, visualizations, sleep sounds & more").font(.text(13, .semibold))
-                        .foregroundColor(.cream.opacity(0.85))
-                }
-                Spacer()
-                Image(systemName: "chevron.right").font(.system(size: 16, weight: .bold))
-                    .foregroundColor(.cream.opacity(0.8))
-            }
-            .padding(16)
-            .frame(maxWidth: .infinity)
-            .background(Color.navy)
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .shadow(color: .navy.opacity(0.35), radius: 12, x: 0, y: 7)
-        }
-        .buttonStyle(.plain)
-        .padding(.top, 2)
     }
 
     private var navGrid: some View {
@@ -158,11 +124,12 @@ struct HomeView: View {
         return LazyVGrid(columns: cols, spacing: 12) {
             navCard("🫧", "Breathe", "A calm minute, anytime") { go(.breathe) }
             navCard("📓", "Journal", "Note how you're feeling") { go(.journal) }
+            navCard("✨", "Insights", "Patterns from your check-ins") { go(.insights) }
             navCard("🧠", "Understand stress", "What it is & why it happens") { go(.understand) }
             navCard("🌿", "In-the-moment", "Quick ways to feel calmer") { go(.techniques) }
             navCard("🌱", "Build resilience", "Habits that lower stress") { go(.resilience) }
             navCard("💛", "Support", "Resources for when it's a lot") { go(.support) }
-            navCard("⚙️", "Settings", "Reminder & Loomi+") { go(.settings) }
+            navCard("⚙️", "Settings", "Reminder & app preferences") { go(.settings) }
         }
         .padding(.top, 6)
     }

@@ -6,7 +6,7 @@
 
 import SwiftUI
 
-enum Screen { case home, relief, breathe, journal, stats, understand, techniques, resilience, support, settings }
+enum Screen { case home, relief, breathe, journal, stats, insights, understand, techniques, resilience, support, settings }
 
 final class Router: ObservableObject {
     static let shared = Router()

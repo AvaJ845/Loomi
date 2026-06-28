@@ -29,7 +29,7 @@ struct PaywallView: View {
 
                 PuppyView(size: 110, happy: true)
                 Text("Loomi+").font(.baloo(28, .heavy)).foregroundColor(.ink)
-                Text("The full lesson library, visualizations, sleep sounds, and your stats history — unlocked once and yours.")
+                Text("Your personal stress patterns — computed on this phone, never uploaded — plus your full check-in history. Unlocked once and yours.")
                     .font(.text(15)).foregroundColor(.muted)
                     .multilineTextAlignment(.center).frame(maxWidth: 320)
 

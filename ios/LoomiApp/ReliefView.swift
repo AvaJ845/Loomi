@@ -7,6 +7,7 @@ import SwiftUI
 
 struct ReliefView: View {
     var goHome: () -> Void
+    @EnvironmentObject private var journal: JournalStore
     enum Step { case intro, breathe, ground, reframe, done }
     @State private var step: Step = .intro
 
@@ -45,9 +46,9 @@ struct ReliefView: View {
             Text("You showed up for yourself in a hard moment — that's the whole skill. How are you feeling?")
                 .font(.text(14.5)).foregroundColor(.muted)
                 .multilineTextAlignment(.center).frame(maxWidth: 320)
-            ChoiceButton("Calmer — thanks, Loomi") { goHome() }
-            ChoiceButton("A bit better") { goHome() }
-            ChoiceButton("Still rough — let's breathe again", kind: .alt) { step = .breathe }
+            ChoiceButton("Calmer — thanks, Loomi") { journal.logReliefOutcome(.calmer); goHome() }
+            ChoiceButton("A bit better") { journal.logReliefOutcome(.better); goHome() }
+            ChoiceButton("Still rough — let's breathe again", kind: .alt) { journal.logReliefOutcome(.stillRough); step = .breathe }
         }
     }
 }

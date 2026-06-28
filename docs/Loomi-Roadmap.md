@@ -56,20 +56,27 @@ Keep **in-the-moment relief free forever** (it's the ethical core and the instal
   the core lessons.
 
 **Loomi+ (subscription)**
-- Full lesson library + visualizations + sleep sounds
-- Stats, streaks, history insights
-- Custom Loomi (collar colors, names)
+- On-device Insights — local pattern recognition over journal + relief-session
+  history (e.g. toughest day of the week, how often breathing actually helped).
+  Computed entirely on-device, nothing leaves the phone — the thing Calm/
+  Headspace structurally can't credibly offer. **Built — `InsightsView.swift`.**
+- Full check-in history + streaks (the free tier only shows the current week).
+- Visualizations + sleep sounds — **not built yet, not sold yet** (see caveat
+  below). Add to the paywall only once real content exists behind it.
+- Custom Loomi (collar colors, names) — not built yet.
 - Suggested pricing band (match category): ~$4.99/mo, ~$29.99/yr, ~$79.99 lifetime.
   Undercut Rootd's $6.99/mo slightly; lifetime converts well for this category.
 
 > Never paywall crisis resources or the panic/stress button. Ever.
 
-**Re-test before locking in pricing.** This tier list was originally drawn up
-when Dobbie was bundled into the app and its extra levels/boss mode were a
-paid tier. Now that Dobbie has been removed from Loomi entirely, that tier
-content is gone too — re-check whether the remaining paid tier (lessons,
-visualizations, sleep sounds, stats, cosmetics) is enough on its own to
-justify the price band, since it just lost one of its line items.
+**Reshape (2026-06-28 council review): sell what's real, not a roadmap.**
+The paywall used to promise a "full lesson library, visualizations, sleep
+sounds" — none of which existed yet — while the only feature with a proven
+mechanism (breathing/grounding) was already free. That's an inverted bet: it
+risks refund requests and reviews calling out vaporware before a single
+feature ships. Fix: `PaywallView.swift` copy now sells only what's built
+(on-device Insights + full history). Visualizations/sleep sounds stay off the
+paywall copy entirely until they exist.
 
 **Paywall — ✅ built, leads with lifetime.** `PaywallView.swift` +
 `EntitlementStore.swift` (StoreKit 2, on-device entitlement check, no server)
@@ -77,12 +84,8 @@ present all three plans but visually default to **lifetime** as the
 recommended choice, not monthly — per the council's reshape verdict: a
 handful of lifetime sales clears the $500/mo bar with zero churn risk, which
 is the realistic path at zero installs/zero marketing budget. Monthly/yearly
-still exist as options. **Caveat:** the content being sold (full lesson
-library, visualizations, sleep sounds) mostly doesn't exist yet — the
-purchasing infrastructure is ready, but don't actually launch the paywall
-until there's real Loomi+ content behind it, or refund requests will follow.
-Requires creating the three IAP products in App Store Connect (see
-`ios/README.md`) before it can fetch real prices.
+still exist as options. Requires creating the three IAP products in App
+Store Connect (see `ios/README.md`) before it can fetch real prices.
 
 ## Build order (highest value ÷ effort first)
 

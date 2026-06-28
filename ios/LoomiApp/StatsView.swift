@@ -18,6 +18,7 @@ struct DayBucket: Identifiable {
 
 struct StatsView: View {
     var goHome: () -> Void
+    var goInsights: () -> Void
     @EnvironmentObject private var store: JournalStore
 
     private var cal: Calendar { Calendar.current }
@@ -104,6 +105,23 @@ struct StatsView: View {
                     .font(.text(14)).foregroundColor(.muted)
                     .frame(maxWidth: .infinity).multilineTextAlignment(.center).padding(.top, 2)
             }
+
+            Button(action: goInsights) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Your Insights").font(.baloo(16, .bold)).foregroundColor(.ink)
+                        Text("Patterns from your check-ins, found on this phone").font(.text(12.5)).foregroundColor(.muted)
+                    }
+                    Spacer()
+                    Text("→").font(.baloo(18, .bold)).foregroundColor(.redDeep)
+                }
+                .padding(16)
+                .background(Color.cream)
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .shadow(color: .navy.opacity(0.15), radius: 9, x: 0, y: 5)
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 4)
         }
     }
 

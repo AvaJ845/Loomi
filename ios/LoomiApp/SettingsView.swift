@@ -9,12 +9,13 @@ import SwiftUI
 
 struct SettingsView: View {
     var goHome: () -> Void
-    var upgrade: () -> Void
 
     @AppStorage("loomi.reminder.enabled") private var reminderEnabled = false
     @AppStorage("loomi.reminder.hour")    private var reminderHour = 20
     @AppStorage("loomi.reminder.minute")  private var reminderMinute = 0
     @State private var scheduleTask: Task<Void, Never>?
+    @EnvironmentObject private var entitlements: EntitlementStore
+    @State private var showPaywall = false
 
     private var reminderDateComponents: DateComponents {
         DateComponents(hour: reminderHour, minute: reminderMinute)
@@ -60,12 +61,25 @@ struct SettingsView: View {
             }
             .card()
 
-            Button(action: upgrade) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Tips for staying calm").font(.baloo(16, .bold)).foregroundColor(.ink)
+                Text("Use the reminder, journal, and support tools to make Loomi part of your calm routine.")
+                    .font(.text(13)).foregroundColor(.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(16)
+            .background(Color.cream)
+            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .shadow(color: .navy.opacity(0.15), radius: 9, x: 0, y: 5)
+
+            Button { showPaywall = true } label: {
                 HStack {
-                    Text("✨").font(.system(size: 18))
-                    Text("Loomi+").font(.baloo(16, .bold)).foregroundColor(.ink)
+                    Text(entitlements.isPlus ? "You're Loomi+ 🐾" : "Get Loomi+")
+                        .font(.baloo(16, .bold)).foregroundColor(.ink)
                     Spacer()
-                    Image(systemName: "chevron.right").foregroundColor(.muted)
+                    if !entitlements.isPlus {
+                        Text("→").font(.baloo(16, .bold)).foregroundColor(.redDeep)
+                    }
                 }
                 .padding(16)
                 .background(Color.cream)
@@ -75,6 +89,9 @@ struct SettingsView: View {
             .buttonStyle(.plain)
 
             PuppyView(size: 110).frame(maxWidth: .infinity).padding(.top, 8)
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(onClose: { showPaywall = false })
         }
         // No onAppear reschedule: a successfully-scheduled UNCalendarNotificationTrigger
         // (repeats: true) persists on its own, so there's nothing to redo on
