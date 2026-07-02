@@ -143,77 +143,126 @@ textarea.field:focus{ outline:none; border-color:var(--red); }
 `;
 
 /* ---------------- Loomi the puppy (SVG) ---------------- */
+/* Brand-sheet fidelity: outlined cartoon style, gradient shading, pink inner
+   ears, tan points, expressive eyes. `happy` = waving pose with tongue. */
 function Puppy({ size = 190, happy = false }) {
+  const uid = React.useId().replace(/:/g, "");
+  const navyG = `navyG-${uid}`, tanG = `tanG-${uid}`, irisG = `irisG-${uid}`;
+  const O = "#16222D"; // outline ink
   return (
     <svg
-      viewBox="0 0 240 260"
+      viewBox="0 0 480 520"
       width={size}
-      height={(size * 260) / 240}
+      height={(size * 520) / 480}
       className="puppy"
       role="img"
       aria-label="Loomi, a friendly Doberman puppy"
     >
-      <ellipse cx="120" cy="246" rx="76" ry="12" fill="var(--rose-deep)" opacity="0.5" />
+      <defs>
+        <linearGradient id={navyG} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#2A4257" /><stop offset="1" stopColor="#1B2B39" />
+        </linearGradient>
+        <linearGradient id={tanG} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#F5A257" /><stop offset="1" stopColor="#DD7E2F" />
+        </linearGradient>
+        <radialGradient id={irisG} cx=".38" cy=".32" r=".9">
+          <stop offset="0" stopColor="#8A5526" /><stop offset="1" stopColor="#3C2716" />
+        </radialGradient>
+      </defs>
+      <g stroke={O} strokeWidth="7" strokeLinejoin="round" strokeLinecap="round">
+        {/* ground shadow */}
+        <ellipse cx="240" cy="492" rx="150" ry="22" fill="var(--rose-deep)" stroke="none" opacity=".55" />
 
-      {/* ears */}
-      <path d="M88 66 L60 10 Q57 4 64 7 L110 54 Z" fill="var(--navy)" />
-      <path d="M85 60 L68 24 Q66 19 72 22 L102 54 Z" fill="var(--tan)" />
-      <path d="M152 66 L180 10 Q183 4 176 7 L130 54 Z" fill="var(--navy)" />
-      <path d="M155 60 L172 24 Q174 19 168 22 L138 54 Z" fill="var(--tan)" />
+        {/* tail */}
+        <path d="M356 420 Q400 410 404 372 Q407 348 388 342 Q394 366 372 384 Q356 396 344 400 Z" fill={`url(#${navyG})`} />
 
-      {/* body */}
-      <path d="M120 150 C92 150 78 168 72 196 C68 222 88 238 120 238 C152 238 172 222 168 196 C162 168 148 150 120 150 Z" fill="var(--navy)" />
-      {/* chest bib */}
-      <path d="M120 160 C107 160 99 173 99 191 C99 210 109 222 120 222 C131 222 141 210 141 191 C141 173 133 160 120 160 Z" fill="var(--tan)" />
-      {/* legs + paws */}
-      <rect x="93" y="198" width="22" height="42" rx="11" fill="var(--navy)" />
-      <rect x="125" y="198" width="22" height="42" rx="11" fill="var(--navy)" />
-      <rect x="90" y="221" width="27" height="20" rx="10" fill="var(--tan)" />
-      <rect x="123" y="221" width="27" height="20" rx="10" fill="var(--tan)" />
-      <path d="M103 226 L103 239 M97 227 L97 238 M109 227 L109 238" stroke="var(--tan-dark)" strokeWidth="1.6" opacity=".5" />
-      <path d="M137 226 L137 239 M131 227 L131 238 M143 227 L143 238" stroke="var(--tan-dark)" strokeWidth="1.6" opacity=".5" />
+        {/* haunches + back paws */}
+        <path d="M158 340 Q118 368 116 424 Q116 470 162 480 L196 484 Q160 428 168 364 Z" fill={`url(#${navyG})`} />
+        <path d="M322 340 Q362 368 364 424 Q364 470 318 480 L284 484 Q320 428 312 364 Z" fill={`url(#${navyG})`} />
+        <path d="M128 458 Q118 486 150 488 Q176 489 180 470 Q182 456 166 452 Q142 448 128 458 Z" fill={`url(#${tanG})`} strokeWidth="6" />
+        <path d="M352 458 Q362 486 330 488 Q304 489 300 470 Q298 456 314 452 Q338 448 352 458 Z" fill={`url(#${tanG})`} strokeWidth="6" />
 
-      {/* head */}
-      <ellipse cx="120" cy="92" rx="56" ry="50" fill="var(--navy)" />
-      {/* eyebrows */}
-      <ellipse cx="98" cy="73" rx="9" ry="5.5" fill="var(--tan)" />
-      <ellipse cx="142" cy="73" rx="9" ry="5.5" fill="var(--tan)" />
-      {/* muzzle */}
-      <ellipse cx="120" cy="112" rx="35" ry="29" fill="var(--tan)" />
+        {/* body + chest bib */}
+        <path d="M240 268 C176 268 142 316 138 380 C134 446 178 486 240 486 C302 486 346 446 342 380 C338 316 304 268 240 268 Z" fill={`url(#${navyG})`} />
+        <path d="M240 292 C208 292 190 326 190 372 C190 424 212 452 240 452 C268 452 290 424 290 372 C290 326 272 292 240 292 Z" fill={`url(#${tanG})`} strokeWidth="6" />
 
-      {/* eyes */}
-      <g>
-        <ellipse cx="99" cy="91" rx="12.5" ry="14.5" fill="var(--cream)" />
-        <ellipse cx="141" cy="91" rx="12.5" ry="14.5" fill="var(--cream)" />
+        {/* left front leg + paw */}
+        <path d="M196 368 L196 452 Q196 470 214 470 L222 470 Q238 470 238 452 L238 368 Z" fill={`url(#${navyG})`} strokeWidth="6" />
+        <path d="M182 452 Q178 484 214 486 Q244 487 244 464 Q244 448 224 446 Q196 444 182 452 Z" fill={`url(#${tanG})`} strokeWidth="6" />
+        <path d="M206 466 L206 484 M222 468 L222 486" fill="none" strokeWidth="4" opacity=".8" />
+
         {happy ? (
           <>
-            <path d="M90 92 Q99 84 108 92" stroke="var(--navy-deep)" strokeWidth="4" fill="none" strokeLinecap="round" />
-            <path d="M132 92 Q141 84 150 92" stroke="var(--navy-deep)" strokeWidth="4" fill="none" strokeLinecap="round" />
+            {/* right front leg raised, waving */}
+            <path d="M282 380 Q318 356 336 316 L352 330 Q336 376 300 402 Q284 412 276 398 Q272 388 282 380 Z" fill={`url(#${navyG})`} strokeWidth="6" />
+            <ellipse cx="352" cy="306" rx="30" ry="27" fill={`url(#${tanG})`} strokeWidth="6" />
+            <ellipse cx="352" cy="313" rx="12" ry="9" fill="var(--tan-dark)" stroke="none" />
+            <circle cx="338" cy="296" r="5.5" fill="var(--tan-dark)" stroke="none" />
+            <circle cx="352" cy="292" r="5.5" fill="var(--tan-dark)" stroke="none" />
+            <circle cx="366" cy="296" r="5.5" fill="var(--tan-dark)" stroke="none" />
+            {/* motion ticks */}
+            <path d="M392 258 L404 240 M406 282 L424 272 M370 244 L376 224" fill="none" stroke="var(--teal)" strokeWidth="8" />
           </>
         ) : (
           <>
-            <ellipse cx="101" cy="93" rx="8.5" ry="10" fill="#3C2716" />
-            <ellipse cx="143" cy="93" rx="8.5" ry="10" fill="#3C2716" />
-            <circle cx="98" cy="89" r="3" fill="#fff" />
-            <circle cx="140" cy="89" r="3" fill="#fff" />
-            {/* blink lids */}
-            <ellipse className="lid" cx="99" cy="91" rx="13" ry="15" fill="var(--navy)" />
-            <ellipse className="lid" cx="141" cy="91" rx="13" ry="15" fill="var(--navy)" />
+            {/* right front leg down */}
+            <path d="M284 368 L284 452 Q284 470 266 470 L258 470 Q242 470 242 452 L242 368 Z" fill={`url(#${navyG})`} strokeWidth="6" />
+            <path d="M298 452 Q302 484 266 486 Q236 487 236 464 Q236 448 256 446 Q284 444 298 452 Z" fill={`url(#${tanG})`} strokeWidth="6" />
+            <path d="M274 466 L274 484 M258 468 L258 486" fill="none" strokeWidth="4" opacity=".8" />
           </>
         )}
+
+        {/* ears (pink interiors) */}
+        <path d="M158 132 L108 22 Q102 8 118 14 L216 96 Z" fill={`url(#${navyG})`} />
+        <path d="M162 116 L126 40 Q122 30 133 36 L198 96 Z" fill="#F2A9B4" strokeWidth="5" />
+        <path d="M322 132 L372 22 Q378 8 362 14 L264 96 Z" fill={`url(#${navyG})`} />
+        <path d="M318 116 L354 40 Q358 30 347 36 L282 96 Z" fill="#F2A9B4" strokeWidth="5" />
+
+        {/* head + sheen + brows + muzzle */}
+        <ellipse cx="240" cy="190" rx="112" ry="100" fill={`url(#${navyG})`} />
+        <path d="M164 130 Q198 100 244 98 Q206 116 190 150 Q176 138 164 130 Z" fill="#33495D" stroke="none" opacity=".55" />
+        <ellipse cx="196" cy="149" rx="19" ry="12" fill={`url(#${tanG})`} strokeWidth="5" />
+        <ellipse cx="284" cy="149" rx="19" ry="12" fill={`url(#${tanG})`} strokeWidth="5" />
+        <path d="M240 168 C196 168 172 194 172 226 C172 258 200 278 240 278 C280 278 308 258 308 226 C308 194 284 168 240 168 Z" fill={`url(#${tanG})`} strokeWidth="6" />
+
+        {/* eyes */}
+        <ellipse cx="198" cy="185" rx="25" ry="29" fill="#FFF9F2" strokeWidth="5" />
+        <ellipse cx="282" cy="185" rx="25" ry="29" fill="#FFF9F2" strokeWidth="5" />
+        <circle cx="202" cy="189" r="17" fill={`url(#${irisG})`} stroke="none" />
+        <circle cx="278" cy="189" r="17" fill={`url(#${irisG})`} stroke="none" />
+        <circle cx="202" cy="191" r="8" fill="#1A0F07" stroke="none" />
+        <circle cx="278" cy="191" r="8" fill="#1A0F07" stroke="none" />
+        <circle cx="196" cy="181" r="6" fill="#fff" stroke="none" />
+        <circle cx="272" cy="181" r="6" fill="#fff" stroke="none" />
+        <circle cx="208" cy="197" r="2.8" fill="#fff" stroke="none" opacity=".8" />
+        <circle cx="284" cy="197" r="2.8" fill="#fff" stroke="none" opacity=".8" />
+        {!happy && (
+          <>
+            <ellipse className="lid" cx="198" cy="185" rx="26" ry="30" fill="var(--navy)" strokeWidth="5" />
+            <ellipse className="lid" cx="282" cy="185" rx="26" ry="30" fill="var(--navy)" strokeWidth="5" />
+          </>
+        )}
+
+        {/* nose */}
+        <path d="M240 205 Q262 205 262 221 Q262 237 240 237 Q218 237 218 221 Q218 205 240 205 Z" fill={O} strokeWidth="5" />
+        <ellipse cx="232" cy="215" rx="6" ry="4" fill="#5C6B77" stroke="none" opacity=".8" />
+
+        {/* mouth */}
+        {happy ? (
+          <>
+            <path d="M204 240 Q240 282 276 240 Q262 268 240 268 Q218 268 204 240 Z" fill="#7A2020" strokeWidth="6" />
+            <path d="M226 254 Q240 250 254 254 Q254 274 240 276 Q226 274 226 254 Z" fill="#F27D8A" strokeWidth="5" />
+          </>
+        ) : (
+          <path d="M240 239 Q240 253 222 257 M240 239 Q240 253 258 257" fill="none" strokeWidth="6" />
+        )}
+
+        {/* collar + tag */}
+        <path d="M168 296 Q240 336 312 296 L312 322 Q240 362 168 322 Z" fill="var(--red)" strokeWidth="6" />
+        <line x1="240" y1="338" x2="240" y2="352" strokeWidth="6" stroke="#B98F1E" />
+        <circle cx="240" cy="368" r="19" fill="var(--gold)" strokeWidth="6" />
+        <circle cx="240" cy="368" r="6.5" fill="var(--gold-deep)" stroke="none" />
       </g>
-
-      {/* nose + mouth */}
-      <ellipse cx="120" cy="103" rx="11" ry="8.5" fill="var(--navy-deep)" />
-      <ellipse cx="116" cy="100" rx="3" ry="2" fill="#7C8893" opacity=".7" />
-      <path d="M120 111 Q120 122 110 126 M120 111 Q120 122 130 126" stroke="var(--navy-deep)" strokeWidth="3" fill="none" strokeLinecap="round" />
-
-      {/* collar + tag */}
-      <path d="M84 148 Q120 168 156 148 L156 161 Q120 181 84 161 Z" fill="var(--red)" />
-      <path d="M84 148 Q120 168 156 148" stroke="var(--red-deep)" strokeWidth="2" fill="none" opacity=".5" />
-      <line x1="120" y1="170" x2="120" y2="178" stroke="var(--gold-deep)" strokeWidth="3" />
-      <circle cx="120" cy="186" r="10" fill="var(--gold)" stroke="var(--gold-deep)" strokeWidth="2" />
-      <circle cx="120" cy="186" r="3.5" fill="var(--gold-deep)" opacity=".55" />
     </svg>
   );
 }
