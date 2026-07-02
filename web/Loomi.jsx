@@ -10,19 +10,22 @@ import React, { useState, useEffect, useRef } from "react";
 */
 
 const STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@600;700;800&family=Inter:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 :root{
-  --navy:#2E3D49; --navy-deep:#243039;
-  --tan:#C2854A; --tan-light:#D7A267; --tan-dark:#A56E3A;
-  --rose-bg:#F0D7D2; --rose-soft:#F7E7E3; --rose-deep:#D8ADA6;
-  --red:#CC392D; --red-deep:#B02E23;
-  --gold:#E2AC39; --gold-deep:#C9912A;
-  --cream:#FBF4EF; --ink:#2E3D49; --muted:#6E6258;
+  /* Brand-board base colors (exact hex from the board) */
+  --navy:#1D2E3D; --navy-deep:#1B2A38;
+  --tan:#E5883C; --tan-light:#FAA559; --tan-dark:#C8712C;
+  --rose-bg:#F4C5C3; --rose-soft:#FBD5D4; --rose-deep:#DC9B97;
+  --red:#E12E2D; --red-deep:#C52323;
+  --gold:#E6C542; --gold-deep:#CDAA33;
+  --teal:#46AFB7; --teal-deep:#3E9AA1;
+  --leaf-green:#A9D79F;
+  --cream:#FBF4EF; --ink:#1D2E3D; --muted:#6E6258;
 }
 *{box-sizing:border-box}
 .loomi-app{
-  font-family:'Nunito Sans',system-ui,sans-serif;
+  font-family:'Inter',system-ui,sans-serif;
   color:var(--ink);
   background:
     radial-gradient(120% 80% at 50% -10%, var(--rose-soft) 0%, var(--rose-bg) 55%, #EAC9C3 100%);
@@ -30,8 +33,8 @@ const STYLES = `
   width:100%;
 }
 .loomi-wrap{ max-width:460px; margin:0 auto; padding:22px 20px 40px; }
-.loomi-h{ font-family:'Baloo 2',cursive; line-height:1.05; }
-button{ font-family:'Baloo 2',cursive; cursor:pointer; border:none; }
+.loomi-h{ font-family:'Nunito Sans',sans-serif; line-height:1.05; }
+button{ font-family:'Nunito Sans',sans-serif; cursor:pointer; border:none; }
 button:focus-visible, a:focus-visible{ outline:3px solid var(--red); outline-offset:3px; border-radius:14px; }
 
 /* top bar */
@@ -40,15 +43,15 @@ button:focus-visible, a:focus-visible{ outline:3px solid var(--red); outline-off
 .brandmark .dot{ width:30px; height:30px; border-radius:50%; background:var(--red);
   display:flex; align-items:center; justify-content:center; box-shadow:0 3px 0 var(--red-deep); }
 .brandmark .dot span{ width:11px; height:11px; border-radius:50%; background:var(--gold); }
-.brandname{ font-family:'Baloo 2',cursive; font-weight:800; font-size:22px; letter-spacing:.3px; }
-.help-pill{ background:var(--cream); color:var(--red-deep); font-weight:700; font-size:13px;
+.brandname{ font-family:'Nunito Sans',sans-serif; font-weight:800; font-size:22px; letter-spacing:.3px; }
+.help-pill{ background:var(--cream); color:var(--teal-deep); font-weight:700; font-size:13px;
   padding:7px 13px; border-radius:999px; box-shadow:0 2px 6px rgba(46,61,73,.12); }
 
 /* cards */
 .card{ background:var(--cream); border-radius:24px; padding:20px;
   box-shadow:0 10px 30px -12px rgba(46,61,73,.30); }
 .eyebrow{ text-transform:uppercase; letter-spacing:2.5px; font-size:11px; font-weight:700;
-  color:var(--tan-dark); font-family:'Nunito Sans'; }
+  color:var(--tan-dark); font-family:'Inter'; }
 
 /* home hero */
 .hero{ text-align:center; padding-top:6px; }
@@ -63,7 +66,7 @@ button:focus-visible, a:focus-visible{ outline:3px solid var(--red); outline-off
   padding:20px; border-radius:22px; box-shadow:0 6px 0 var(--red-deep), 0 14px 26px -10px rgba(204,57,45,.6);
   transition:transform .08s ease, box-shadow .08s ease; margin-top:18px; }
 .big-btn:active{ transform:translateY(4px); box-shadow:0 2px 0 var(--red-deep), 0 8px 16px -10px rgba(204,57,45,.6); }
-.big-btn small{ display:block; font-size:13px; font-weight:600; opacity:.9; margin-top:2px; font-family:'Nunito Sans'; }
+.big-btn small{ display:block; font-size:13px; font-weight:600; opacity:.9; margin-top:2px; font-family:'Inter'; }
 
 /* nav grid */
 .nav-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
@@ -71,7 +74,7 @@ button:focus-visible, a:focus-visible{ outline:3px solid var(--red); outline-off
   box-shadow:0 6px 18px -10px rgba(46,61,73,.3); transition:transform .12s ease; }
 .nav-card:active{ transform:scale(.97); }
 .nav-card .ico{ font-size:22px; }
-.nav-card .t{ font-family:'Baloo 2',cursive; font-weight:700; font-size:16px; margin-top:6px; }
+.nav-card .t{ font-family:'Nunito Sans',sans-serif; font-weight:700; font-size:16px; margin-top:6px; }
 .nav-card .d{ font-size:12.5px; color:var(--muted); margin-top:2px; line-height:1.35; }
 
 /* generic page */
@@ -81,13 +84,13 @@ button:focus-visible, a:focus-visible{ outline:3px solid var(--red); outline-off
 .page-head h2{ font-size:24px; font-weight:800; }
 
 .lesson{ margin-bottom:14px; }
-.lesson .num{ font-family:'Baloo 2'; font-weight:700; color:var(--red); }
-.lesson h3{ font-family:'Baloo 2'; font-weight:700; font-size:17px; margin:0 0 4px; }
+.lesson .num{ font-family:'Nunito Sans'; font-weight:700; color:var(--red); }
+.lesson h3{ font-family:'Nunito Sans'; font-weight:700; font-size:17px; margin:0 0 4px; }
 .lesson p{ font-size:14.5px; color:var(--muted); line-height:1.5; margin:0; }
 
 /* relief flow */
 .flow{ text-align:center; }
-.flow .line{ font-size:20px; font-weight:700; font-family:'Baloo 2'; line-height:1.3; margin:16px 0 6px; }
+.flow .line{ font-size:20px; font-weight:700; font-family:'Nunito Sans'; line-height:1.3; margin:16px 0 6px; }
 .flow .hint{ font-size:14.5px; color:var(--muted); margin:0 auto 8px; max-width:320px; line-height:1.5; }
 .choice{ width:100%; background:var(--cream); color:var(--ink); font-size:17px; font-weight:700;
   padding:16px; border-radius:18px; box-shadow:0 5px 16px -8px rgba(46,61,73,.35); margin-top:10px; }
@@ -101,25 +104,25 @@ button:focus-visible, a:focus-visible{ outline:3px solid var(--red); outline-off
   box-shadow:0 0 0 10px rgba(204,57,45,.10), 0 0 0 22px rgba(204,57,45,.05);
   display:flex; align-items:center; justify-content:center; }
 .orb-ring{ position:absolute; width:170px; height:170px; border-radius:50%; border:4px solid var(--red); opacity:.55; }
-.orb-label{ font-family:'Baloo 2'; font-weight:700; color:var(--navy-deep); font-size:19px; text-align:center; }
+.orb-label{ font-family:'Nunito Sans'; font-weight:700; color:var(--navy-deep); font-size:19px; text-align:center; }
 .orb-label .cnt{ display:block; font-size:30px; }
 .breath-meta{ font-size:14px; color:var(--muted); margin-top:2px; }
 
 textarea.field{ width:100%; border:2px solid var(--rose-deep); border-radius:16px; padding:13px;
-  font-family:'Nunito Sans'; font-size:15px; resize:vertical; min-height:84px; background:var(--cream); color:var(--ink); }
+  font-family:'Inter'; font-size:15px; resize:vertical; min-height:84px; background:var(--cream); color:var(--ink); }
 textarea.field:focus{ outline:none; border-color:var(--red); }
 
 .row2{ display:flex; gap:10px; margin-top:12px; }
 .row2 .choice{ margin-top:0; }
 
-.ghost{ background:transparent; color:var(--muted); font-weight:700; font-size:14px; padding:10px; margin-top:10px; font-family:'Baloo 2'; }
+.ghost{ background:transparent; color:var(--muted); font-weight:700; font-size:14px; padding:10px; margin-top:10px; font-family:'Nunito Sans'; }
 .dots{ display:flex; gap:7px; justify-content:center; margin:14px 0 2px; }
 .dots i{ width:8px; height:8px; border-radius:50%; background:var(--rose-deep); display:block; }
 .dots i.on{ background:var(--red); }
 
 .note{ font-size:12.5px; color:var(--muted); line-height:1.5; }
 .res{ background:var(--cream); border-radius:18px; padding:15px; margin-bottom:11px; box-shadow:0 5px 16px -10px rgba(46,61,73,.3);}
-.res .rt{ font-family:'Baloo 2'; font-weight:700; font-size:15.5px; }
+.res .rt{ font-family:'Nunito Sans'; font-weight:700; font-size:15.5px; }
 .res .rd{ font-size:13.5px; color:var(--muted); margin-top:3px; line-height:1.45; }
 .res a{ color:var(--red-deep); font-weight:700; text-decoration:none; }
 
@@ -286,7 +289,7 @@ function Grounding({ onDone, onBack }) {
   return (
     <div className="flow">
       <div className="eyebrow" style={{ marginTop: 6 }}>Grounding · 5-4-3-2-1</div>
-      <div style={{ fontFamily: "Baloo 2", fontWeight: 800, fontSize: 64, color: "var(--red)", lineHeight: 1 }}>{s.n}</div>
+      <div style={{ fontFamily: "Nunito Sans", fontWeight: 800, fontSize: 64, color: "var(--red)", lineHeight: 1 }}>{s.n}</div>
       <div className="line" style={{ marginTop: 0 }}>{s.sense}</div>
       <p className="hint">{s.tip}</p>
       <div className="dots">{SENSES.map((_, k) => <i key={k} className={k <= i ? "on" : ""} />)}</div>
