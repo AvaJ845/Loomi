@@ -19,7 +19,7 @@ final class Router: ObservableObject {
         case "relief":  screen = .relief
         case "breathe": screen = .breathe
         case "journal": screen = .journal
-        default:        screen = .home
+        default:        break
         }
     }
 }

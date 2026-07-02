@@ -7,9 +7,16 @@
 import StoreKit
 
 enum LoomiPlusProduct: String, CaseIterable {
-    case monthly  = "loomi.plus.monthly"
-    case annual   = "loomi.plus.annual"
     case lifetime = "loomi.plus.lifetime"
+    case annual   = "loomi.plus.annual"
+    case monthly  = "loomi.plus.monthly"
+}
+
+enum PurchaseOutcome {
+    case success
+    case cancelled
+    case pending
+    case failed(String)
 }
 
 @MainActor
@@ -29,22 +36,40 @@ final class EntitlementStore: ObservableObject {
         }
     }
 
-    deinit { updatesTask?.cancel() }
-
     func loadProducts() async {
         do {
-            let ids = LoomiPlusProduct.allCases.map(\.rawValue)
-            products = try await Product.products(for: ids).sorted { $0.price < $1.price }
+            let order = LoomiPlusProduct.allCases.map(\.rawValue)
+            let ids = Set(order)
+            let fetched = try await Product.products(for: ids)
+            products = fetched.sorted { a, b in
+                (order.firstIndex(of: a.id) ?? .max) < (order.firstIndex(of: b.id) ?? .max)
+            }
         } catch {
             products = []
         }
     }
 
-    func purchase(_ product: Product) async {
-        guard let result = try? await product.purchase() else { return }
-        if case .success(let verification) = result, case .verified(let transaction) = verification {
-            await transaction.finish()
-            await refreshEntitlement()
+    @discardableResult
+    func purchase(_ product: Product) async -> PurchaseOutcome {
+        do {
+            let result = try await product.purchase()
+            switch result {
+            case .success(let verification):
+                guard case .verified(let transaction) = verification else {
+                    return .failed("Purchase couldn't be verified.")
+                }
+                await transaction.finish()
+                await refreshEntitlement()
+                return .success
+            case .userCancelled:
+                return .cancelled
+            case .pending:
+                return .pending
+            @unknown default:
+                return .failed("Something unexpected happened.")
+            }
+        } catch {
+            return .failed(error.localizedDescription)
         }
     }
 

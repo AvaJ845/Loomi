@@ -32,7 +32,7 @@ struct ContentView: View {
         case .relief:      ReliefView(goHome: { router.screen = .home })
         case .breathe:     BreatheScreen(goHome: { router.screen = .home })
         case .journal:     JournalView(goHome: { router.screen = .home }, goStats: { router.screen = .stats })
-        case .stats:       StatsView(goHome: { router.screen = .journal }, goInsights: { router.screen = .insights })
+        case .stats:       StatsView(goBack: { router.screen = .journal }, goInsights: { router.screen = .insights })
         case .insights:    InsightsView(goHome: { router.screen = .stats })
         case .understand:  LessonsView(title: "Understand stress", eyebrow: "The basics", items: understandItems, goHome: { router.screen = .home })
         case .techniques:  LessonsView(title: "In-the-moment", eyebrow: "Fast relief", items: techniqueItems, goHome: { router.screen = .home })
@@ -61,7 +61,7 @@ struct ContentView: View {
             if router.screen != .support {
                 Button { router.screen = .support } label: {
                     Text("Need support?")
-                        .font(.baloo(13, .bold)).foregroundColor(.redDeep)
+                        .font(.baloo(13, .bold)).foregroundColor(.tealDeep)
                         .padding(.horizontal, 13).padding(.vertical, 7)
                         .background(Color.cream).clipShape(Capsule())
                         .shadow(color: .navy.opacity(0.12), radius: 6, x: 0, y: 2)

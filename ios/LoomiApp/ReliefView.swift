@@ -112,7 +112,6 @@ struct BreathingView: View {
             guard !started else { return }
             started = true
             sessionStart = Date()
-            HealthKitManager.shared.requestAuthorization()
             withAnimation(.easeInOut(duration: Double(breathPhases[0].secs))) { scale = breathPhases[0].scale }
         }
         .onReceive(timer) { _ in tick() }

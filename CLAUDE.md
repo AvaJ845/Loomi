@@ -63,6 +63,25 @@ See `ios/README.md` for step-by-step. Summary:
 5. Signing & Capabilities ▸ add **HealthKit** (optional but recommended).
 6. Info.plist: add `NSHealthUpdateUsageDescription`.
 
+## Testing without Xcode
+
+SwiftUI itself only compiles/runs on macOS, so there's no way to build or run
+`ios/LoomiApp` without a Mac + Xcode. For a quick way to click through the
+app's flow, copy, and palette without that (e.g. on Windows, or for a fast
+design review), `web/Loomi.jsx` is a matching React prototype:
+
+```
+cd web
+npm install
+npm run dev      # opens a Vite dev server; visit the printed localhost URL
+```
+
+It shares Loomi's palette/typography and mirrors the core screens (home,
+breathe, journal, stats, support), but it is a reference stand-in, not a 1:1
+port — business logic (StoreKit, HealthKit, notifications) lives only in the
+Swift app. Treat it as a UX/copy preview, not a substitute for on-device
+testing before release.
+
 ## Common tasks for Claude Code
 
 - **Add a new screen**: add a case to `Screen` enum in `Router.swift`, add a

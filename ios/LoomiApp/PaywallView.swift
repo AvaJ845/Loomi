@@ -14,6 +14,7 @@ struct PaywallView: View {
     @EnvironmentObject private var store: EntitlementStore
     @State private var selected: LoomiPlusProduct = .lifetime
     @State private var purchasing = false
+    @State private var errorMessage: String?
 
     var body: some View {
         ScrollView {
@@ -29,7 +30,7 @@ struct PaywallView: View {
 
                 PuppyView(size: 110, happy: true)
                 Text("Loomi+").font(.baloo(28, .heavy)).foregroundColor(.ink)
-                Text("Your personal stress patterns — computed on this phone, never uploaded — plus your full check-in history. Unlocked once and yours.")
+                Text("Your personal stress patterns — computed on this phone, never uploaded. Unlocked once and yours.")
                     .font(.text(15)).foregroundColor(.muted)
                     .multilineTextAlignment(.center).frame(maxWidth: 320)
 
@@ -49,11 +50,16 @@ struct PaywallView: View {
 
                     Button {
                         guard let product = store.products.first(where: { $0.id == selected.rawValue }) else { return }
+                        errorMessage = nil
                         purchasing = true
                         Task {
-                            await store.purchase(product)
+                            let outcome = await store.purchase(product)
                             purchasing = false
-                            if store.isPlus { onClose() }
+                            switch outcome {
+                            case .success: onClose()
+                            case .cancelled, .pending: break
+                            case .failed(let message): errorMessage = message
+                            }
                         }
                     } label: {
                         Text(purchasing ? "…" : "Continue")
@@ -64,6 +70,11 @@ struct PaywallView: View {
                     }
                     .buttonStyle(.plain)
                     .disabled(purchasing)
+
+                    if let errorMessage {
+                        Text(errorMessage).font(.text(13)).foregroundColor(.brandRed)
+                            .multilineTextAlignment(.center)
+                    }
 
                     Button("Restore purchase") { Task { await store.restore() } }
                         .font(.baloo(13)).foregroundColor(.muted).buttonStyle(.plain)

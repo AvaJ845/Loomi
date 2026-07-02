@@ -25,7 +25,9 @@ final class HealthKitManager {
         store.requestAuthorization(toShare: [type], read: []) { _, _ in }
     }
 
-    /// Save a mindful session covering [start, end].
+    /// Save a mindful session covering [start, end]. Requests authorization
+    /// first if it hasn't been granted yet, so a save right after the first
+    /// breathing session doesn't silently lose the prompt race.
     func logMindfulSession(start: Date, end: Date) {
         guard HKHealthStore.isHealthDataAvailable(),
               let type = mindfulType,
@@ -33,6 +35,12 @@ final class HealthKitManager {
         let sample = HKCategorySample(type: type,
                                       value: HKCategoryValue.notApplicable.rawValue,
                                       start: start, end: end)
-        store.save(sample) { _, _ in }
+        if store.authorizationStatus(for: type) == .notDetermined {
+            store.requestAuthorization(toShare: [type], read: []) { [store] _, _ in
+                store.save(sample) { _, _ in }
+            }
+        } else {
+            store.save(sample) { _, _ in }
+        }
     }
 }

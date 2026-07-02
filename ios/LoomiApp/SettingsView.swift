@@ -47,7 +47,7 @@ struct SettingsView: View {
                 Toggle("Daily check-in reminder", isOn: $reminderEnabled)
                     .font(.baloo(16, .bold)).foregroundColor(.ink)
                     .tint(.brandRed)
-                    .onChange(of: reminderEnabled) { _, _ in scheduleReminder() }
+                    .onChange(of: reminderEnabled) { _ in scheduleReminder() }
 
                 Text("One quiet notification a day, at a time you choose. No badges, no nagging — off by default, and you can turn it off here any time.")
                     .font(.text(13)).foregroundColor(.muted)

@@ -1,8 +1,10 @@
 //
 //  Theme.swift
 //  Colors, fonts, background, and shared view helpers.
-//  Palette is pulled straight from the uploaded Doberman artwork:
-//  navy body, caramel tan points, dusty rose, red collar, gold tag.
+//  Palette matches the Loomi brand board exactly (Blush Pink, Deep Navy,
+//  Warm Tan, Bright Red, Gold, Soothing Teal, Soft Leaf Green, White).
+//  Deep/Light/Dark variants are derived from those exact base hexes rather
+//  than hand-picked, so the source-of-truth swatches stay in one place.
 //
 
 import SwiftUI
@@ -18,30 +20,54 @@ extension Color {
                   opacity: 1.0)
     }
 
-    static let navy     = Color(hex: 0x2E3D49)
-    static let navyDeep = Color(hex: 0x243039)
-    static let tan      = Color(hex: 0xC2854A)
-    static let tanLight = Color(hex: 0xD7A267)
-    static let tanDark  = Color(hex: 0xA56E3A)
-    static let roseBg   = Color(hex: 0xF0D7D2)
-    static let roseSoft = Color(hex: 0xF7E7E3)
-    static let roseDeep = Color(hex: 0xD8ADA6)
-    static let brandRed = Color(hex: 0xCC392D)
-    static let redDeep  = Color(hex: 0xB02E23)
-    static let gold     = Color(hex: 0xE2AC39)
-    static let goldDeep = Color(hex: 0xC9912A)
+    /// Nudges brightness (HSB) up or down — used to derive Light/Deep/Dark
+    /// variants from a single brand-board base color instead of hand-picking hexes.
+    func adjusted(brightness delta: Double) -> Color {
+        let ui = UIColor(self)
+        var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        ui.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
+        let newB = min(max(b + CGFloat(delta), 0), 1)
+        return Color(hue: Double(h), saturation: Double(s), brightness: Double(newB), opacity: Double(a))
+    }
+
+    // Brand-board base colors (exact hex from the board).
+    static let navy      = Color(hex: 0x1D2E3D)
+    static let tan        = Color(hex: 0xE5883C)
+    static let brandRed   = Color(hex: 0xE12E2D)
+    static let gold       = Color(hex: 0xE6C542)
+    static let roseBg     = Color(hex: 0xF4C5C3)
+    static let teal       = Color(hex: 0x46AFB7)
+    static let leafGreen  = Color(hex: 0xA9D79F)
+
+    // Derived variants.
+    static let navyDeep  = navy.adjusted(brightness: -0.08)
+    static let tanLight  = tan.adjusted(brightness: 0.12)
+    static let tanDark   = tan.adjusted(brightness: -0.15)
+    static let roseSoft  = roseBg.adjusted(brightness: 0.06)
+    static let roseDeep  = roseBg.adjusted(brightness: -0.12)
+    static let redDeep   = brandRed.adjusted(brightness: -0.12)
+    static let goldDeep  = gold.adjusted(brightness: -0.13)
+    static let tealDeep  = teal.adjusted(brightness: -0.12)
+
+    // Kept as a deliberately warm off-white for card surfaces (rather than the
+    // board's flat #FFFFFF) — see "Key decisions" in CLAUDE.md for the calming,
+    // non-clinical framing this app aims for.
     static let cream    = Color(hex: 0xFBF4EF)
-    static let ink      = Color(hex: 0x2E3D49)
+    static let ink      = navy
     static let muted    = Color(hex: 0x6E6258)
 }
 
 // MARK: - Fonts
-// System "rounded" stands in for Baloo 2 (display) and system default for body.
-// Swap these for bundled fonts if you want an exact match to the web version.
+// The board specifies Nunito Sans (headings) / Inter (body). Neither ships as
+// a system font, so this uses the closest system stand-ins — system default
+// (non-rounded) for both — rather than the previous Baloo-2-style rounded
+// display font. For an exact match, bundle the Nunito Sans / Inter .ttf files
+// and register them in Info.plist (UIAppFonts), then swap `.system` below for
+// `.custom`.
 
 extension Font {
     static func baloo(_ size: CGFloat, _ weight: Font.Weight = .bold) -> Font {
-        .system(size: size, weight: weight, design: .rounded)
+        .system(size: size, weight: weight, design: .default)
     }
     static func text(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
         .system(size: size, weight: weight, design: .default)

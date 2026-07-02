@@ -17,7 +17,7 @@ struct DayBucket: Identifiable {
 }
 
 struct StatsView: View {
-    var goHome: () -> Void
+    var goBack: () -> Void
     var goInsights: () -> Void
     @EnvironmentObject private var store: JournalStore
 
@@ -52,7 +52,7 @@ struct StatsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 12) {
-                BackButton(action: goHome)
+                BackButton(action: goBack)
                 Text("Your week").font(.baloo(24, .heavy)).foregroundColor(.ink)
             }
             .padding(.vertical, 4)
@@ -69,7 +69,7 @@ struct StatsView: View {
                 HStack(spacing: 12) {
                     statTile("\(weekTotal)", "check-ins")
                     statTile("\(daysJournaled)/7", "days")
-                    statTile("\(streak)", streak == 1 ? "day streak" : "day streak")
+                    statTile("\(streak)", "day streak")
                 }
 
                 VStack(alignment: .leading, spacing: 10) {
